@@ -2,7 +2,7 @@ import classNames from 'classnames'
 import styles from './toggle.module.css'
 
 function Toggle({ toggleValue, setToggleValue }) {
-  const toggleSwitch = () => setToggleValue((prev) => !prev)
+  const toggleSwitch = () => setToggleValue(!toggleValue)
 
   return (
     <button

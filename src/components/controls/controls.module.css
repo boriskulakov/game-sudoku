@@ -16,6 +16,7 @@
   font-family: 'Courier Prime', monospace;
   user-select: none;
   cursor: pointer;
+  transition: background-color 0.2s;
 }
 .button.active {
   background-color: #4631d1;

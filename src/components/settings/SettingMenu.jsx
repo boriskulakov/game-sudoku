@@ -1,53 +1,85 @@
+import React from 'react'
 import styles from './setting.module.css'
 import classNames from 'classnames'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { SettingContext } from '../../SettingContext.jsx'
-import Toggle from '../toggle/Toggle'
+import ToggleSection from './toggleSection/ToggleSection'
+import closeIcon from '@/img/close.svg'
 
-function SettingMenu() {
-  // const { currentSettings, setCurrentSettings } = useContext(SettingContext)
-  const [toggleValue, setToggleValue] = useState(true)
-  const [toggleValue1, setToggleValue1] = useState(true)
-  const [toggleValue2, setToggleValue2] = useState(true)
+const levels = [
+  { level: 'easy', text: 'Легко' },
+  { level: 'medium', text: 'Средне' },
+  { level: 'hard', text: 'Сложно' },
+]
+
+function SettingMenu({ onClose }) {
+  const { currentSettings, changeSettings } = useContext(SettingContext)
+
+  const setDifficulty = (level) => changeSettings({ difficulty: level })
 
   return (
     <div className={classNames(styles.container)}>
-      <p className={classNames(styles.title)}>Настройки</p>
+      <div className={classNames(styles.header)}>
+        <p className={classNames(styles.title)}>Настройки</p>
+        <button
+          className={classNames(styles.close)}
+          onClick={onClose}
+          style={{
+            backgroundImage: `url(${closeIcon})`,
+            backgroundSize: '100%',
+            backgroundRepeat: 'no-repeat',
+            backgroundPosition: 'center',
+          }}
+        ></button>
+      </div>
+
       <div className={classNames(styles.game)}>
-        <button className={classNames(styles.but, styles.start)}>
+        <button
+          className={classNames(styles.but, styles.start)}
+          disabled={currentSettings.timer > 0}
+        >
           Начать игру
         </button>
-        <button className={classNames(styles.but, styles.restart)}>
+        <button
+          className={classNames(styles.but, styles.restart)}
+          disabled={currentSettings.timer === 0}
+        >
           Рестарт
         </button>
-        <button className={classNames(styles.but, styles.new)}>
+        <button
+          className={classNames(styles.but, styles.new)}
+          disabled={currentSettings.timer === 0}
+        >
           Новая игра
         </button>
       </div>
+
       <div className={classNames(styles.difficulty)}>
         <p className={classNames(styles.subtitle)}>Сложность</p>
-        <div className={classNames(styles.levels)}>
-          <button className={classNames(styles.level, styles.active)}>
-            Легко
-          </button>
-          <button className={classNames(styles.level)}>Средне</button>
-          <button className={classNames(styles.level)}>Сложно</button>
-        </div>
+        <form className={classNames(styles.levels)}>
+          {levels.map((lvl) => (
+            <React.Fragment key={lvl.level}>
+              <input
+                type="radio"
+                id={`difficulty_${lvl.level}`}
+                name="difficulty"
+                value={lvl.level}
+                defaultChecked={lvl.level === currentSettings.difficulty}
+                disabled={currentSettings.timer > 0}
+                onClick={() => setDifficulty(lvl.level)}
+              />
+              <label
+                htmlFor={`difficulty_${lvl.level}`}
+                className={classNames(styles.level)}
+              >
+                {lvl.text}
+              </label>
+            </React.Fragment>
+          ))}
+        </form>
       </div>
-      <div className={classNames(styles.settings)}>
-        <div className={classNames(styles.option)}>
-          <span className={classNames(styles.name)}>Таймер</span>
-          <Toggle toggleValue={toggleValue} setToggleValue={setToggleValue} />
-        </div>
-        <div className={classNames(styles.option)}>
-          <span className={classNames(styles.name)}>Подсвечивать ошибки</span>
-          <Toggle toggleValue={toggleValue1} setToggleValue={setToggleValue1} />
-        </div>
-        <div className={classNames(styles.option)}>
-          <span className={classNames(styles.name)}>Подсвечивать выбранные цифры</span>
-          <Toggle toggleValue={toggleValue2} setToggleValue={setToggleValue2} />
-        </div>
-      </div>
+
+      <ToggleSection />
     </div>
   )
 }
