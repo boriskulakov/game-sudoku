@@ -1,0 +1,32 @@
+:root {
+  --toggle-width: 60px;
+}
+
+.toggle {
+  width: var(--toggle-width);
+  height: 30px;
+  background-color: #2c115d;
+  border: none;
+  border-radius: 20px;
+  position: relative;
+  transition: all 0.5s;
+}
+.toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  height: 26px;
+  width: 26px;
+  background-color: rgba(239, 237, 253, 0.7);
+  border-radius: 50%;
+  transition: all 0.5s;
+}
+
+.toggle[data-on='true'] {
+  background-color: #4631d1;
+}
+.toggle[data-on='true']::after {
+  background-color: #e2e1e4;
+  transform: translateX(calc(var(--toggle-width) - 100% - 4px));
+}
