@@ -16,6 +16,9 @@ function SettingMenu({ onClose }) {
   const { currentSettings, changeSettings } = useContext(SettingContext)
 
   const setDifficulty = (level) => changeSettings({ difficulty: level })
+  const startGame = () => {
+    changeSettings({ isStarted: true })
+  }
 
   return (
     <div className={classNames(styles.container)}>
@@ -36,19 +39,20 @@ function SettingMenu({ onClose }) {
       <div className={classNames(styles.game)}>
         <button
           className={classNames(styles.but, styles.start)}
-          disabled={currentSettings.timer > 0}
+          disabled={currentSettings.isStarted}
+          onClick={startGame}
         >
           Начать игру
         </button>
         <button
           className={classNames(styles.but, styles.restart)}
-          disabled={currentSettings.timer === 0}
+          disabled={!currentSettings.isStarted}
         >
           Рестарт
         </button>
         <button
           className={classNames(styles.but, styles.new)}
-          disabled={currentSettings.timer === 0}
+          disabled={!currentSettings.isStarted}
         >
           Новая игра
         </button>

@@ -1,9 +1,10 @@
-import './App.css'
+import './css/App.css'
 import { useState } from 'react'
 import { SettingContext } from './SettingContext.jsx'
 import Game from './components/game/Game'
 
 const defaultValue = {
+  isStarted: false,
   difficulty: 'easy',
   timer: 0,
   pause: false,
