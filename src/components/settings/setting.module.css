@@ -22,8 +22,8 @@
 }
 
 .close {
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   transition: all 0.2s;
   opacity: 0.8;
   position: absolute;

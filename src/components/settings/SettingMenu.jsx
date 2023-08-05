@@ -26,7 +26,7 @@ function SettingMenu({ onClose }) {
           onClick={onClose}
           style={{
             backgroundImage: `url(${closeIcon})`,
-            backgroundSize: '100%',
+            backgroundSize: '60%',
             backgroundRepeat: 'no-repeat',
             backgroundPosition: 'center',
           }}
