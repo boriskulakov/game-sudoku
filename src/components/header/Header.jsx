@@ -3,12 +3,11 @@ import classNames from 'classnames'
 import SettingMenu from '../settings/SettingMenu'
 
 import { useState } from 'react'
-import { createPortal } from 'react-dom'
 import Timer from './timer/Timer'
+import Portal from '@/Portal'
 
 function Header({ setLevelContent }) {
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const portalRoot = document.getElementById('pageContainer')
 
   return (
     <div className={classNames(styles.header)}>
@@ -19,14 +18,14 @@ function Header({ setLevelContent }) {
         Настройки
       </button>
       <Timer />
-      {settingsOpen &&
-        createPortal(
+      {settingsOpen && (
+        <Portal>
           <SettingMenu
             onClose={() => setSettingsOpen(false)}
             setLevelContent={setLevelContent}
-          />,
-          portalRoot
-        )}
+          />
+        </Portal>
+      )}
     </div>
   )
 }

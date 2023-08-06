@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './setting.module.css'
 import classNames from 'classnames'
 import { useContext } from 'react'
 import { SettingContext } from '../../SettingContext.jsx'
-import ToggleSection from './toggleSection/ToggleSection'
-import closeIcon from '@/img/close.svg'
 import { getSudokuContent } from '@/generator/generatorSudoku.js'
+import closeIcon from '@/img/close.svg'
+import ToggleSection from './toggleSection/ToggleSection'
+import Portal from '@/Portal'
+import Modal from './modal/Modal'
 
 const levels = [
   { level: 'easy', text: 'Легко' },
@@ -15,11 +17,21 @@ const levels = [
 
 function SettingMenu({ onClose, setLevelContent }) {
   const { currentSettings, changeSettings } = useContext(SettingContext)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const setDifficulty = (level) => changeSettings({ difficulty: level })
   const startGame = () => {
     changeSettings({ isStarted: true })
     setLevelContent(getSudokuContent())
+  }
+  const resetGame = () => {
+    setIsModalOpen(false)
+    changeSettings({ isStarted: false, timer: 0, pause: false })
+    setLevelContent(null)
+  }
+  const openModal = () => {
+    changeSettings({ pause: true })
+    setIsModalOpen(true)
   }
 
   return (
@@ -55,6 +67,7 @@ function SettingMenu({ onClose, setLevelContent }) {
         <button
           className={classNames(styles.but, styles.new)}
           disabled={!currentSettings.isStarted}
+          onClick={openModal}
         >
           Новая игра
         </button>
@@ -86,6 +99,14 @@ function SettingMenu({ onClose, setLevelContent }) {
       </div>
 
       <ToggleSection />
+      {isModalOpen && (
+        <Portal>
+          <Modal
+            onConfirm={resetGame}
+            onClose={() => setIsModalOpen(false)}
+          ></Modal>
+        </Portal>
+      )}
     </div>
   )
 }
