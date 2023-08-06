@@ -18,9 +18,9 @@ export function getSudokuContent() {
   setNextBlockLine(2)
 
   return {
-    rows: digitRows,
-    columns: digitColumns,
-    blocks: digitBlocks,
+    rows: digitRows.map((set) => [...set]),
+    columns: digitColumns.map((set) => [...set]),
+    blocks: digitBlocks.map((set) => [...set]),
   }
 }
 

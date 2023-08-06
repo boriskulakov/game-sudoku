@@ -1,21 +1,25 @@
 import styles from './board.module.css'
 import classNames from 'classnames'
 
-function Board({ currentDigit }) {
+function Board({ currentDigit, levelContent }) {
+  const { blocks } = levelContent || { blocks: [] }
+
   const fillCell = (target) => {
     target.textContent = currentDigit ? currentDigit : ''
   }
 
   return (
     <div className={classNames(styles.board)}>
-      {new Array(9).fill(null).map((_, ix) => (
-        <div className={classNames(styles.square)} key={ix}>
-          {new Array(9).fill(null).map((_, ix) => (
+      {new Array(9).fill(null).map((_, blockNumber) => (
+        <div className={classNames(styles.square)} key={blockNumber}>
+          {new Array(9).fill(null).map((_, cellNumber) => (
             <div
               className={classNames(styles.cell)}
-              key={ix}
+              key={cellNumber}
               onClick={(e) => fillCell(e.target)}
-            ></div>
+            >
+              {blocks?.[blockNumber]?.[cellNumber]}
+            </div>
           ))}
         </div>
       ))}

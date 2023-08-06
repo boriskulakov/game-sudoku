@@ -6,7 +6,7 @@ import { useState } from 'react'
 import { createPortal } from 'react-dom'
 import Timer from './timer/Timer'
 
-function Header() {
+function Header({ setLevelContent }) {
   const [settingsOpen, setSettingsOpen] = useState(false)
   const portalRoot = document.getElementById('pageContainer')
 
@@ -21,7 +21,10 @@ function Header() {
       <Timer />
       {settingsOpen &&
         createPortal(
-          <SettingMenu onClose={() => setSettingsOpen(false)} />,
+          <SettingMenu
+            onClose={() => setSettingsOpen(false)}
+            setLevelContent={setLevelContent}
+          />,
           portalRoot
         )}
     </div>

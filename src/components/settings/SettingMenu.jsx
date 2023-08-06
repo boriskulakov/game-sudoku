@@ -5,6 +5,7 @@ import { useContext } from 'react'
 import { SettingContext } from '../../SettingContext.jsx'
 import ToggleSection from './toggleSection/ToggleSection'
 import closeIcon from '@/img/close.svg'
+import { getSudokuContent } from '@/generator/generatorSudoku.js'
 
 const levels = [
   { level: 'easy', text: 'Легко' },
@@ -12,12 +13,13 @@ const levels = [
   { level: 'hard', text: 'Сложно' },
 ]
 
-function SettingMenu({ onClose }) {
+function SettingMenu({ onClose, setLevelContent }) {
   const { currentSettings, changeSettings } = useContext(SettingContext)
 
   const setDifficulty = (level) => changeSettings({ difficulty: level })
   const startGame = () => {
     changeSettings({ isStarted: true })
+    setLevelContent(getSudokuContent())
   }
 
   return (
