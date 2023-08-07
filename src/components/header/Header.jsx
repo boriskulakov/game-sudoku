@@ -6,7 +6,7 @@ import { useState } from 'react'
 import Timer from './timer/Timer'
 import Portal from '@/Portal'
 
-function Header({ setLevelContent, isVictory }) {
+function Header({ setLevelContent, isVictory, resetGameInfo }) {
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   return (
@@ -27,6 +27,7 @@ function Header({ setLevelContent, isVictory }) {
           <SettingMenu
             onClose={() => setSettingsOpen(false)}
             setLevelContent={setLevelContent}
+            resetGameInfo={resetGameInfo}
           />
         </Portal>
       )}

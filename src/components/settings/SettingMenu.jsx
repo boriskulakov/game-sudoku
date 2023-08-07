@@ -15,7 +15,7 @@ const levels = [
   { level: 'hard', text: 'Сложно' },
 ]
 
-function SettingMenu({ onClose, setLevelContent }) {
+function SettingMenu({ onClose, setLevelContent, resetGameInfo }) {
   const { currentSettings, changeSettings } = useContext(SettingContext)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
@@ -25,7 +25,7 @@ function SettingMenu({ onClose, setLevelContent }) {
     changeSettings({ isStarted: true })
     setLevelContent(getSudokuContent().blocks)
   }
-  const resetGame = () => {
+  const setNewGame = () => {
     setIsModalOpen(false)
     changeSettings({
       isStarted: false,
@@ -34,6 +34,15 @@ function SettingMenu({ onClose, setLevelContent }) {
       pause: false,
     })
     setLevelContent(null)
+  }
+  const resetGame = () => {
+    onClose()
+    changeSettings({
+      isCompleted: false,
+      timer: 0,
+      pause: false,
+    })
+    resetGameInfo()
   }
   const openModal = () => {
     changeSettings({ pause: true })
@@ -67,6 +76,7 @@ function SettingMenu({ onClose, setLevelContent }) {
         <button
           className={classNames(styles.but, styles.restart)}
           disabled={!currentSettings.isStarted}
+          onClick={resetGame}
         >
           Рестарт
         </button>
@@ -108,7 +118,7 @@ function SettingMenu({ onClose, setLevelContent }) {
       {isModalOpen && (
         <Portal>
           <Modal
-            onConfirm={resetGame}
+            onConfirm={setNewGame}
             onClose={() => setIsModalOpen(false)}
           ></Modal>
         </Portal>

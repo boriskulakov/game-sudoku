@@ -37,6 +37,36 @@ function Game() {
     return infoTemplate
   }
 
+  const resetGameInfo = () => {
+    let currentGameInfo = [...gameInfo.entries()].slice(0, 9)
+    const changedDigitsCounter = new Map()
+
+    for (const block of currentGameInfo) {
+      for (let cell of block[1]) {
+        if (!cell.isInitial) {
+          cell.actualDigit = 0
+          cell.wa = false
+        }
+
+        if (changedDigitsCounter.has(cell.actualDigit)) {
+          increaseSetItem(changedDigitsCounter, cell.actualDigit, 1)
+        } else {
+          changedDigitsCounter.set(cell.actualDigit, 1)
+        }
+      }
+    }
+
+    setGameInfo(
+      new Map(
+        currentGameInfo.concat([
+          ['filled', true],
+          ['completed', false],
+        ])
+      )
+    )
+    setDigitCounter(changedDigitsCounter)
+  }
+
   const changeGameInfo = (blockNumber, cellNumber, cellInfo, previousDigit) => {
     let entries = [...gameInfo.entries()]
     entries[blockNumber][1][cellNumber] = cellInfo
@@ -112,6 +142,7 @@ function Game() {
       <Header
         setLevelContent={setLevelContent}
         isVictory={gameInfo.get('completed')}
+        resetGameInfo={resetGameInfo}
       />
       <Board
         currentDigit={currentDigit}
