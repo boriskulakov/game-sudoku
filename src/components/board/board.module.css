@@ -3,11 +3,25 @@
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
   gap: 8px;
 }
+.board.completed {
+  outline: 2px solid #e2e1e4;
+}
+.board.completed .square {
+  outline: none;
+}
+.board.completed .cell {
+  opacity: 0.8;
+}
 
 .square {
+  outline: 2px solid #9382ff;
+  background-color: #9382ff9b;
   display: grid;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
   gap: 1px;
+}
+.square.full {
+  outline: 2px solid #e2e1e4;
 }
 
 .cell {
@@ -18,7 +32,7 @@
   height: 3.4rem;
   font-size: 2.8rem;
   font-family: 'Courier Prime', monospace;
-  outline: 2px solid #9382ff;
+  background-color: #030014;
   user-select: none;
   cursor: pointer;
   transition: all 0.2s;
@@ -28,4 +42,10 @@
 }
 .cell.wa {
   background-color: #871910;
+}
+.cell:not(.wa).same {
+  background-color: #4631d1;
+}
+.cell.initial {
+  opacity: 0.8;
 }

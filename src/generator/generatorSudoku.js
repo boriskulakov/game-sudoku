@@ -1,3 +1,5 @@
+import { shuffle } from "./shuffle"
+
 const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 let digitRows = []
@@ -162,22 +164,6 @@ function splitRow(row) {
   let _row = [...row]
   while (_row.length >= 3) parts.push(_row.splice(0, 3))
   return parts
-}
-
-function shuffle(array) {
-  let currentIndex = array.length
-  let result = array.slice()
-
-  while (currentIndex != 0) {
-    let randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex--
-    ;[result[currentIndex], result[randomIndex]] = [
-      result[randomIndex],
-      result[currentIndex],
-    ]
-  }
-
-  return result
 }
 
 function getAllCombinations(array) {

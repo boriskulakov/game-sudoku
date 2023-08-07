@@ -5,6 +5,7 @@ import Game from './components/game/Game'
 
 const defaultValue = {
   isStarted: false,
+  isCompleted: false,
   difficulty: 'easy',
   timer: 0,
   pause: false,

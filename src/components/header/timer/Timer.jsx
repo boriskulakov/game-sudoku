@@ -9,6 +9,7 @@ function Timer() {
   const { currentSettings, changeSettings } = useContext(SettingContext)
   const {
     isStarted,
+    isCompleted,
     pause: currentPause,
     timer: currentTimer,
     timer_display: currentTimer_display,
@@ -33,21 +34,21 @@ function Timer() {
       timeoutId = setTimeout(increaseTime, 1000)
     }
 
-    if (isStarted && !currentPause) {
+    if (isStarted && !currentPause && !isCompleted) {
       timeoutId = setTimeout(increaseTime, 1000)
     }
 
     return () => {
       clearTimeout(timeoutId)
     }
-  }, [changeSettings, isStarted, currentTimer, currentPause])
+  }, [changeSettings, isStarted, currentTimer, currentPause, isCompleted])
 
   return (
     <>
       {currentTimer_display && (
         <div className={classNames(styles.timer)}>
           <span className={classNames(styles.time)}>{currentTime}</span>
-          {isStarted && (
+          {isStarted && !isCompleted && (
             <button
               className={classNames(styles.pause)}
               onClick={setPause}

@@ -1,27 +1,23 @@
 import styles from './board.module.css'
 import classNames from 'classnames'
+import Block from './block/Block'
 
-function Board({ currentDigit, levelContent }) {
-  const { blocks } = levelContent || { blocks: [] }
-
-  const fillCell = (target) => {
-    target.textContent = currentDigit ? currentDigit : ''
-  }
-
+function Board({ currentDigit, gameInfo, changeGameInfo }) {
   return (
-    <div className={classNames(styles.board)}>
+    <div
+      className={classNames(
+        styles.board,
+        gameInfo.get('completed') && styles.completed
+      )}
+    >
       {new Array(9).fill(null).map((_, blockNumber) => (
-        <div className={classNames(styles.square)} key={blockNumber}>
-          {new Array(9).fill(null).map((_, cellNumber) => (
-            <div
-              className={classNames(styles.cell)}
-              key={cellNumber}
-              onClick={(e) => fillCell(e.target)}
-            >
-              {blocks?.[blockNumber]?.[cellNumber]}
-            </div>
-          ))}
-        </div>
+        <Block
+          key={blockNumber}
+          blockNumber={blockNumber}
+          currentDigit={currentDigit}
+          gameInfo={gameInfo}
+          changeGameInfo={changeGameInfo}
+        />
       ))}
     </div>
   )

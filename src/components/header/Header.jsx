@@ -6,7 +6,7 @@ import { useState } from 'react'
 import Timer from './timer/Timer'
 import Portal from '@/Portal'
 
-function Header({ setLevelContent }) {
+function Header({ setLevelContent, isVictory }) {
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   return (
@@ -17,7 +17,11 @@ function Header({ setLevelContent }) {
       >
         Настройки
       </button>
+
+      {isVictory && <p className={classNames(styles.victory)}>Победа!</p>}
+
       <Timer />
+
       {settingsOpen && (
         <Portal>
           <SettingMenu

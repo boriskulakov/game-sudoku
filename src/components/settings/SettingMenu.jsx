@@ -21,12 +21,18 @@ function SettingMenu({ onClose, setLevelContent }) {
 
   const setDifficulty = (level) => changeSettings({ difficulty: level })
   const startGame = () => {
+    onClose()
     changeSettings({ isStarted: true })
-    setLevelContent(getSudokuContent())
+    setLevelContent(getSudokuContent().blocks)
   }
   const resetGame = () => {
     setIsModalOpen(false)
-    changeSettings({ isStarted: false, timer: 0, pause: false })
+    changeSettings({
+      isStarted: false,
+      isCompleted: false,
+      timer: 0,
+      pause: false,
+    })
     setLevelContent(null)
   }
   const openModal = () => {
