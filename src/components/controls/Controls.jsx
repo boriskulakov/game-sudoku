@@ -15,6 +15,8 @@ function Controls({
 }) {
   const { currentSettings } = useContext(SettingContext)
   const [activeDigit, setActiveDigit] = useState(null)
+  const isMaxCount = (digit) =>
+    currentSettings.digits_count_display && digitCounter?.get(digit) >= 9
 
   const changeDigit = (digit) => {
     const newDigit = activeDigit === digit ? null : digit
@@ -29,7 +31,7 @@ function Controls({
           className={classNames(
             styles.button,
             activeDigit === digit && styles.active,
-            digitCounter?.get(digit) >= 9 && styles.maxCount
+            isMaxCount(digit) && styles.maxCount
           )}
           key={digit}
           onClick={() => changeDigit(digit)}
