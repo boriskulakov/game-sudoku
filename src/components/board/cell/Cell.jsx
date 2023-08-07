@@ -17,13 +17,14 @@ function Cell({
     if (currentSettings.isCompleted) return
     if (!currentSettings.isStarted) return
     if (cellInfo.isInitial) return
-
+    const previousDigit = +target.textContent
     const cellDigit =
       currentDigit && currentDigit !== cellInfo.actualDigit ? currentDigit : ''
+
     target.textContent = cellDigit
     cellInfo.actualDigit = cellDigit
     if (cellInfo.actualDigit !== cellInfo.correctDigit) cellInfo.wa = true
-    changeGameInfo(cellInfo)
+    changeGameInfo(cellInfo, previousDigit)
   }
 
   const isSameDigit =

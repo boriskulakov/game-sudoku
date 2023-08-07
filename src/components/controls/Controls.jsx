@@ -4,10 +4,18 @@ import classNames from 'classnames'
 import eraserIcon from '@/img/eraser.png'
 import pencilIcon from '@/img/pencil.svg'
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { SettingContext } from '../../SettingContext'
 
-function Controls({ setCurrentDigit, isNotesActive, setIsNotesActive }) {
+function Controls({
+  setCurrentDigit,
+  isNotesActive,
+  setIsNotesActive,
+  digitCounter,
+}) {
+  const { currentSettings } = useContext(SettingContext)
   const [activeDigit, setActiveDigit] = useState(null)
+
   const changeDigit = (digit) => {
     const newDigit = activeDigit === digit ? null : digit
     setActiveDigit(newDigit)
@@ -20,12 +28,18 @@ function Controls({ setCurrentDigit, isNotesActive, setIsNotesActive }) {
         <button
           className={classNames(
             styles.button,
-            activeDigit === digit && styles.active
+            activeDigit === digit && styles.active,
+            digitCounter?.get(digit) >= 9 && styles.maxCount
           )}
           key={digit}
           onClick={() => changeDigit(digit)}
         >
           {digit}
+          {currentSettings.digits_count_display && (
+            <span className={classNames(styles.counter)}>
+              {digitCounter?.get(digit)}
+            </span>
+          )}
         </button>
       ))}
 

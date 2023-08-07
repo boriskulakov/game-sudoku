@@ -12,6 +12,7 @@ const defaultValue = {
   timer_display: true,
   wa_display: false,
   same_digits_display: true,
+  digits_count_display: false,
 }
 
 function App() {

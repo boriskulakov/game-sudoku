@@ -12,6 +12,9 @@ function ToggleSection() {
   const [sameDigitsToggle, setSameDigitsToggle] = useState(
     currentSettings.same_digits_display
   )
+  const [digitsCountToggle, setDigitsCountToggle] = useState(
+    currentSettings.digits_count_display
+  )
 
   const onTimerSwitch = (value) => {
     setTimerToggle(value)
@@ -26,6 +29,11 @@ function ToggleSection() {
   const onSameDigitsSwitch = (value) => {
     setSameDigitsToggle(value)
     changeSettings({ same_digits_display: value })
+  }
+
+  const onDigitsCountSwitch = (value) => {
+    setDigitsCountToggle(value)
+    changeSettings({ digits_count_display: value })
   }
 
   return (
@@ -45,6 +53,15 @@ function ToggleSection() {
         <Toggle
           toggleValue={sameDigitsToggle}
           setToggleValue={onSameDigitsSwitch}
+        />
+      </div>
+      <div className={classNames(styles.option)}>
+        <span className={classNames(styles.name)}>
+          Показывать количество цифр
+        </span>
+        <Toggle
+          toggleValue={digitsCountToggle}
+          setToggleValue={onDigitsCountSwitch}
         />
       </div>
     </div>

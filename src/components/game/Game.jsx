@@ -9,6 +9,10 @@ import { shuffle } from '../../generator/shuffle'
 
 const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+const increaseSetItem = (currentSet, index, diff) => {
+  currentSet.set(index, currentSet.get(index) + diff)
+}
+
 function Game() {
   const { currentSettings, changeSettings } = useContext(SettingContext)
 
@@ -16,6 +20,7 @@ function Game() {
   const [isNotesActive, setIsNotesActive] = useState(false)
   const [levelContent, setLevelContent] = useState(null)
   const [gameInfo, setGameInfo] = useState(new Map([['filled', false]]))
+  const [digitCounter, setDigitCounter] = useState(null)
 
   const getDefaultGameInfo = () => {
     const infoTemplate = new Map()
@@ -32,7 +37,7 @@ function Game() {
     return infoTemplate
   }
 
-  const changeGameInfo = (blockNumber, cellNumber, cellInfo) => {
+  const changeGameInfo = (blockNumber, cellNumber, cellInfo, previousDigit) => {
     let entries = [...gameInfo.entries()]
     entries[blockNumber][1][cellNumber] = cellInfo
 
@@ -45,6 +50,17 @@ function Game() {
               .length === 9
         ).length === 9
     if (isGameComplete) changeSettings({ isCompleted: true })
+
+    const changedDigitsCounter = new Map(digitCounter)
+    const actualDigit = cellInfo.actualDigit
+    if (actualDigit) {
+      increaseSetItem(changedDigitsCounter, actualDigit, 1)
+    }
+    if (previousDigit) {
+      increaseSetItem(changedDigitsCounter, previousDigit, -1)
+    }
+
+    setDigitCounter(changedDigitsCounter)
     setGameInfo(new Map(entries.concat([['completed', isGameComplete]])))
   }
 
@@ -56,6 +72,7 @@ function Game() {
 
   if (levelContent && !gameInfo.get('filled')) {
     const defaultInfo = getDefaultGameInfo()
+    const defaultDigitCounters = new Map()
 
     for (let blockNumber = 0; blockNumber < 9; blockNumber++) {
       const currentBlock = defaultInfo.get(blockNumber)
@@ -76,11 +93,18 @@ function Game() {
         if (initialCells.includes(cellDigit)) {
           currentBlock[cell].actualDigit = cellDigit
           currentBlock[cell].isInitial = true
+
+          if (defaultDigitCounters.has(cellDigit)) {
+            increaseSetItem(defaultDigitCounters, cellDigit, 1)
+          } else {
+            defaultDigitCounters.set(cellDigit, 1)
+          }
         }
       }
     }
     defaultInfo.set('filled', true)
     setGameInfo(defaultInfo)
+    setDigitCounter(defaultDigitCounters)
   }
 
   return (
@@ -99,6 +123,7 @@ function Game() {
         setCurrentDigit={setCurrentDigit}
         isNotesActive={isNotesActive}
         setIsNotesActive={setIsNotesActive}
+        digitCounter={digitCounter}
       />
     </div>
   )
