@@ -2,6 +2,7 @@
   display: grid;
   grid-template: repeat(3, 1fr) / repeat(3, 1fr);
   gap: 8px;
+  position: relative;
 }
 .board.completed {
   outline: 2px solid #e2e1e4;
@@ -48,4 +49,15 @@
 }
 .cell.initial {
   opacity: 0.8;
+}
+
+.blur {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #0300142f;
+  backdrop-filter: blur(15px);
+  outline: 2px solid #9382ff;
 }

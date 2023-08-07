@@ -44,25 +44,25 @@ function Timer() {
   }, [changeSettings, isStarted, currentTimer, currentPause, isCompleted])
 
   return (
-    <>
-      {currentTimer_display && (
-        <div className={classNames(styles.timer)}>
+    <div className={classNames(styles.timer)}>
+      <>
+        {currentTimer_display && (
           <span className={classNames(styles.time)}>{currentTime}</span>
-          {isStarted && !isCompleted && (
-            <button
-              className={classNames(styles.pause)}
-              onClick={setPause}
-              style={{
-                backgroundImage: `url(${currentPauseIcon})`,
-                backgroundSize: '100%',
-                backgroundRepeat: 'no-repeat',
-                backgroundPosition: 'center',
-              }}
-            ></button>
-          )}
-        </div>
-      )}
-    </>
+        )}
+        {isStarted && !isCompleted && (
+          <button
+            className={classNames(styles.pause)}
+            onClick={setPause}
+            style={{
+              backgroundImage: `url(${currentPauseIcon})`,
+              backgroundSize: '100%',
+              backgroundRepeat: 'no-repeat',
+              backgroundPosition: 'center',
+            }}
+          ></button>
+        )}
+      </>
+    </div>
   )
 }
 export default Timer

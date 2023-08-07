@@ -2,7 +2,7 @@ import styles from './board.module.css'
 import classNames from 'classnames'
 import Block from './block/Block'
 
-function Board({ currentDigit, gameInfo, changeGameInfo }) {
+function Board({ currentDigit, gameInfo, changeGameInfo, isPaused }) {
   return (
     <div
       className={classNames(
@@ -17,8 +17,10 @@ function Board({ currentDigit, gameInfo, changeGameInfo }) {
           currentDigit={currentDigit}
           gameInfo={gameInfo}
           changeGameInfo={changeGameInfo}
+          isPaused={isPaused}
         />
       ))}
+      {isPaused && <div className={classNames(styles.blur)}></div>}
     </div>
   )
 }

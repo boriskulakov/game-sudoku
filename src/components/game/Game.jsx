@@ -93,6 +93,7 @@ function Game() {
         currentDigit={currentDigit}
         gameInfo={gameInfo}
         changeGameInfo={changeGameInfo}
+        isPaused={currentSettings.pause}
       />
       <Controls
         setCurrentDigit={setCurrentDigit}

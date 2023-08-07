@@ -28,6 +28,7 @@ function Cell({
 
   const isSameDigit =
     currentSettings.same_digits_display &&
+    !currentSettings.pause &&
     !gameInfo.get('completed') &&
     currentDigit &&
     cellInfo?.actualDigit === currentDigit
