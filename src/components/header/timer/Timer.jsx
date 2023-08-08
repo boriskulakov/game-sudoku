@@ -21,7 +21,7 @@ function Timer() {
   const currentTime = `${
     currentTimer / 3600 > 1 ? Math.trunc(currentTimer / 3600) + ':' : ''
   }${
-    currentTimer / 60 > 9
+    currentTimer / 60 >= 10
       ? Math.trunc(currentTimer / 60)
       : '0' + Math.trunc(currentTimer / 60)
   }:${currentTimer % 60 > 9 ? currentTimer % 60 : '0' + (currentTimer % 60)}`
