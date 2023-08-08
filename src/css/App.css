@@ -1,0 +1,22 @@
+body {
+  background-color: #030014;
+  color: #e2e1e4;
+}
+
+.pageContainer {
+  margin: 30px 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+@media screen and (max-width: 1470px) {
+  .pageContainer {
+    width: fit-content;
+    margin: 30px auto;
+    padding: 0 20px;
+    flex-flow: column nowrap;
+    gap: 50px;
+  }
+}

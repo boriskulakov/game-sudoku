@@ -1,0 +1,8 @@
+.container {
+  background-color: transparent;
+  border-radius: 5px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: 20px;
+}

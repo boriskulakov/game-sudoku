@@ -1,0 +1,127 @@
+.container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: #030014;
+  border: 2px solid rgba(147, 130, 255, 0.5);
+  border-radius: 5px;
+  padding: 15px 10px 30px;
+  text-align: center;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 20px;
+}
+
+@media screen and (max-width: 1470px) {
+  .container {
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    order: -1;
+  }
+}
+
+.header {
+  position: relative;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.3rem;
+}
+
+.close {
+  width: 2.5rem;
+  height: 2.5rem;
+  transition: all 0.2s;
+  opacity: 0.8;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+.close:hover {
+  opacity: 1;
+}
+
+.game {
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.but {
+  padding: 10px 15px;
+  font-size: 1.2rem;
+  background-color: #4631d1;
+  font-weight: 600;
+  border-radius: 5px;
+}
+.but:not(:disabled):hover {
+  outline: 2px solid #9382ff;
+}
+.but:disabled {
+  color: rgba(239, 237, 253, 0.6);
+  background-color: transparent;
+  cursor: auto;
+}
+
+.difficulty {
+  display: flex;
+  flex-flow: column wrap;
+  gap: 10px;
+}
+
+.subtitle {
+  font-size: 1.15rem;
+}
+
+.levels {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 20px;
+}
+
+input[name='difficulty']:checked + label {
+  background-color: #2c115d;
+}
+input[name='difficulty']:disabled + label {
+  cursor: auto;
+}
+
+.level {
+  width: calc((100% - 40px) / 3 - 20px);
+  font-size: 1rem;
+  padding: 10px;
+  border-radius: 5px;
+  outline: 1px solid #9382ff;
+  user-select: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+input[name='difficulty']:not(:checked):not(:disabled) + label:hover {
+  background-color: #2c115da4;
+}
+
+.settings {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: start;
+  gap: 15px;
+}
+
+.option {
+  width: 100%;
+  padding: 0 15px;
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.name {
+  font-size: 1.15rem;
+}
