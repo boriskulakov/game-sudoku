@@ -12,6 +12,15 @@
   gap: 20px;
 }
 
+@media screen and (max-width: 1470px) {
+  .container {
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    order: -1;
+  }
+}
+
 .header {
   position: relative;
 }
@@ -38,6 +47,7 @@
 .game {
   max-width: 100%;
   display: flex;
+  justify-content: space-between;
   gap: 25px;
 }
 
