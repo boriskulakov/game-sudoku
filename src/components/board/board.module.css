@@ -31,12 +31,11 @@
   align-items: center;
   width: 3.4rem;
   height: 3.4rem;
-  font-size: 2.8rem;
-  font-family: 'Courier Prime', monospace;
   background-color: #030014;
   user-select: none;
   cursor: pointer;
   transition: all 0.2s;
+  position: relative;
 }
 .cell:hover {
   background-color: #2c115da4;
@@ -49,6 +48,36 @@
 }
 .cell.initial {
   opacity: 0.8;
+}
+
+.cellNumber {
+  font-size: 2.8rem;
+  font-family: 'Courier Prime', monospace;
+}
+
+.notes {
+  padding: 3px;
+  padding-bottom: 1px;
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.7;
+  visibility: hidden;
+}
+
+.noteNumber {
+  font-size: 0.85rem;
+  font-family: 'Courier Prime', monospace;
+  text-align: center;
+}
+
+.noted {
+  visibility: visible;
 }
 
 .blur {

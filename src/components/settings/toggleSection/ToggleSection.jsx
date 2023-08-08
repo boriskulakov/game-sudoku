@@ -48,20 +48,20 @@ function ToggleSection() {
       </div>
       <div className={classNames(styles.option)}>
         <span className={classNames(styles.name)}>
-          Подсвечивать выбранные цифры
-        </span>
-        <Toggle
-          toggleValue={sameDigitsToggle}
-          setToggleValue={onSameDigitsSwitch}
-        />
-      </div>
-      <div className={classNames(styles.option)}>
-        <span className={classNames(styles.name)}>
           Показывать количество цифр
         </span>
         <Toggle
           toggleValue={digitsCountToggle}
           setToggleValue={onDigitsCountSwitch}
+        />
+      </div>
+      <div className={classNames(styles.option)}>
+        <span className={classNames(styles.name)}>
+          Подсвечивать выбранные цифры
+        </span>
+        <Toggle
+          toggleValue={sameDigitsToggle}
+          setToggleValue={onSameDigitsSwitch}
         />
       </div>
     </div>

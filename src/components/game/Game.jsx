@@ -30,6 +30,7 @@ function Game() {
         actualDigit: 0,
         wa: false,
         isInitial: false,
+        notes: new Set(),
       }))
       infoTemplate.set(blockNumber, currentBlock)
     }
@@ -39,10 +40,12 @@ function Game() {
 
   const resetGameInfo = () => {
     let currentGameInfo = [...gameInfo.entries()].slice(0, 9)
-    const changedDigitsCounter = new Map()
+    const changedDigitsCounter = new Map(NUMBERS.map((digit) => [digit, 0]))
 
     for (const block of currentGameInfo) {
       for (let cell of block[1]) {
+        cell.notes = new Set()
+
         if (!cell.isInitial) {
           cell.actualDigit = 0
           cell.wa = false
@@ -50,8 +53,6 @@ function Game() {
 
         if (changedDigitsCounter.has(cell.actualDigit)) {
           increaseSetItem(changedDigitsCounter, cell.actualDigit, 1)
-        } else {
-          changedDigitsCounter.set(cell.actualDigit, 1)
         }
       }
     }
@@ -98,11 +99,12 @@ function Game() {
     const defaultInfo = getDefaultGameInfo()
     defaultInfo.set('filled', false)
     setGameInfo(defaultInfo)
+    setDigitCounter(new Map())
   }
 
   if (levelContent && !gameInfo.get('filled')) {
     const defaultInfo = getDefaultGameInfo()
-    const defaultDigitCounters = new Map()
+    const defaultDigitCounters = new Map(NUMBERS.map((digit) => [digit, 0]))
 
     for (let blockNumber = 0; blockNumber < 9; blockNumber++) {
       const currentBlock = defaultInfo.get(blockNumber)
@@ -124,11 +126,7 @@ function Game() {
           currentBlock[cell].actualDigit = cellDigit
           currentBlock[cell].isInitial = true
 
-          if (defaultDigitCounters.has(cellDigit)) {
-            increaseSetItem(defaultDigitCounters, cellDigit, 1)
-          } else {
-            defaultDigitCounters.set(cellDigit, 1)
-          }
+          increaseSetItem(defaultDigitCounters, cellDigit, 1)
         }
       }
     }
@@ -149,6 +147,7 @@ function Game() {
         gameInfo={gameInfo}
         changeGameInfo={changeGameInfo}
         isPaused={currentSettings.pause}
+        isNotesActive={isNotesActive}
       />
       <Controls
         setCurrentDigit={setCurrentDigit}

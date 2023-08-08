@@ -8,6 +8,7 @@ function Block({
   gameInfo,
   changeGameInfo,
   isPaused,
+  isNotesActive,
 }) {
   const blockInfo = gameInfo.get(blockNumber)
   const isFullBlock =
@@ -23,6 +24,7 @@ function Block({
           cellNumber={cellNumber}
           currentDigit={currentDigit}
           changeGameInfo={changeGameInfo.bind(null, blockNumber, cellNumber)}
+          isNotesActive={isNotesActive}
         />
       ))}
     </div>
