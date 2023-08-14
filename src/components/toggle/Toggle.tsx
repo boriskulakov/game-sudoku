@@ -1,7 +1,12 @@
-import classNames from 'classnames'
 import styles from './toggle.module.css'
+import classNames from 'classnames'
 
-function Toggle({ toggleValue, setToggleValue }) {
+interface ToggleProps {
+  toggleValue: boolean
+  setToggleValue: (arg0: boolean) => void
+}
+
+function Toggle({ toggleValue, setToggleValue }: ToggleProps) {
   const toggleSwitch = () => setToggleValue(!toggleValue)
 
   return (

@@ -1,8 +1,12 @@
 import styles from '../setting.module.css'
 import classNames from 'classnames'
-import Toggle from '../../toggle/Toggle'
+
 import { useContext, useState } from 'react'
-import { SettingContext } from '@/SettingContext.jsx'
+import { SettingContext } from '@/context/SettingContext'
+
+import Toggle from '../../toggle/Toggle'
+
+type SwitchHandler = (arg0: boolean) => void
 
 function ToggleSection() {
   const { currentSettings, changeSettings } = useContext(SettingContext)
@@ -16,22 +20,22 @@ function ToggleSection() {
     currentSettings.digits_count_display
   )
 
-  const onTimerSwitch = (value) => {
+  const onTimerSwitch: SwitchHandler = (value) => {
     setTimerToggle(value)
     changeSettings({ timer_display: value })
   }
 
-  const onWASwitch = (value) => {
+  const onWASwitch: SwitchHandler = (value) => {
     setWaToggle(value)
     changeSettings({ wa_display: value })
   }
 
-  const onSameDigitsSwitch = (value) => {
+  const onSameDigitsSwitch: SwitchHandler = (value) => {
     setSameDigitsToggle(value)
     changeSettings({ same_digits_display: value })
   }
 
-  const onDigitsCountSwitch = (value) => {
+  const onDigitsCountSwitch: SwitchHandler = (value) => {
     setDigitsCountToggle(value)
     changeSettings({ digits_count_display: value })
   }

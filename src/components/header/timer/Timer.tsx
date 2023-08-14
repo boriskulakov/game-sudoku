@@ -1,9 +1,11 @@
 import styles from '../header.module.css'
 import classNames from 'classnames'
+
+import { useContext, useEffect } from 'react'
+import { SettingContext } from '@/context/SettingContext'
+
 import playIcon from '@/img/play.svg'
 import pauseIcon from '@/img/pause.svg'
-import { useContext, useEffect } from 'react'
-import { SettingContext } from '@/SettingContext'
 
 function Timer() {
   const { currentSettings, changeSettings } = useContext(SettingContext)
@@ -27,7 +29,7 @@ function Timer() {
   }:${currentTimer % 60 > 9 ? currentTimer % 60 : '0' + (currentTimer % 60)}`
 
   useEffect(() => {
-    let timeoutId = null
+    let timeoutId: NodeJS.Timeout
 
     function increaseTime() {
       changeSettings({ timer: currentTimer + 1 })

@@ -1,9 +1,15 @@
 import './css/App.css'
+
 import { useState } from 'react'
-import { SettingContext } from './SettingContext.jsx'
+import {
+  ChangeSettings,
+  SettingContext,
+  SettingsValues,
+} from './context/SettingContext'
+
 import Game from './components/game/Game'
 
-const defaultValue = {
+const defaultValue: SettingsValues = {
   isStarted: false,
   isCompleted: false,
   difficulty: 'easy',
@@ -18,7 +24,7 @@ const defaultValue = {
 function App() {
   const [currentSettings, setCurrentSettings] = useState(defaultValue)
 
-  const changeSettings = (newValues) =>
+  const changeSettings: ChangeSettings = (newValues) =>
     setCurrentSettings(Object.create(Object.assign(currentSettings, newValues)))
 
   return (

@@ -1,30 +1,29 @@
 import styles from '../board.module.css'
 import classNames from 'classnames'
+
+import { useContext } from 'react'
+import { SettingContext } from '@/context/SettingContext'
+import { GameContext } from '@/context/GameContext'
+
 import Cell from '../cell/Cell'
 
-function Block({
-  blockNumber,
-  currentDigit,
-  gameInfo,
-  changeGameInfo,
-  isPaused,
-  isNotesActive,
-}) {
+function Block({ blockNumber }: { blockNumber: number }) {
+  const { currentSettings } = useContext(SettingContext)
+  const { gameInfo, changeGameInfo } = useContext(GameContext)
+
   const blockInfo = gameInfo.get(blockNumber)
   const isFullBlock =
-    !isPaused && blockInfo?.filter((cell) => cell.actualDigit > 0).length === 9
+    !currentSettings.pause &&
+    blockInfo?.filter((cell) => cell.actualDigit > 0).length === 9
 
   return (
     <div className={classNames(styles.square, isFullBlock && styles.full)}>
       {new Array(9).fill(null).map((_, cellNumber) => (
         <Cell
           key={cellNumber}
-          gameInfo={gameInfo}
           blockInfo={blockInfo}
           cellNumber={cellNumber}
-          currentDigit={currentDigit}
           changeGameInfo={changeGameInfo.bind(null, blockNumber, cellNumber)}
-          isNotesActive={isNotesActive}
         />
       ))}
     </div>

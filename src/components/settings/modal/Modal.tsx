@@ -1,9 +1,15 @@
-import classNames from 'classnames'
 import styles from './modal.module.css'
+import classNames from 'classnames'
+
 import { useEffect } from 'react'
 
-function Modal({ onClose, onConfirm }) {
-  const onKeydown = ({ key }) => {
+interface ModalProps {
+  onClose: () => void
+  onConfirm: () => void
+}
+
+function Modal({ onClose, onConfirm }: ModalProps) {
+  const onKeydown = ({ key }: KeyboardEvent) => {
     if (key === 'Escape') onClose()
   }
 

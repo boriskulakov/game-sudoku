@@ -1,24 +1,30 @@
 import styles from './controls.module.css'
 import classNames from 'classnames'
 
+import { useContext, useState } from 'react'
+import { SettingContext } from '@/context/SettingContext'
+import { GameContext } from '@/context/GameContext'
+
 import eraserIcon from '@/img/eraser.png'
 import pencilIcon from '@/img/pencil.svg'
 
-import { useContext, useState } from 'react'
-import { SettingContext } from '../../SettingContext'
+type Digits = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+const NUMBERS: Digits[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 function Controls({
-  setCurrentDigit,
-  isNotesActive,
-  setIsNotesActive,
   digitCounter,
+}: {
+  digitCounter: Map<number, number> | null
 }) {
   const { currentSettings } = useContext(SettingContext)
-  const [activeDigit, setActiveDigit] = useState(null)
-  const isMaxCount = (digit) =>
-    currentSettings.digits_count_display && digitCounter?.get(digit) >= 9
+  const { setCurrentDigit, isNotesActive, setIsNotesActive } =
+    useContext(GameContext)
 
-  const changeDigit = (digit) => {
+  const [activeDigit, setActiveDigit] = useState<Digits | 0 | null>(null)
+  const isMaxCount = (digit: number) =>
+    currentSettings.digits_count_display && digitCounter?.get(digit)! >= 9
+
+  const changeDigit = (digit: Digits | 0) => {
     const newDigit = activeDigit === digit ? null : digit
     setActiveDigit(newDigit)
     setCurrentDigit(newDigit)
@@ -26,7 +32,7 @@ function Controls({
 
   return (
     <div className={classNames(styles.controls)}>
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((digit) => (
+      {NUMBERS.map((digit) => (
         <button
           className={classNames(
             styles.button,
