@@ -1,25 +1,35 @@
-import React, { useState } from 'react'
 import styles from './setting.module.css'
 import classNames from 'classnames'
-import { useContext } from 'react'
-import { SettingContext } from '../../SettingContext.jsx'
-import { getSudokuContent } from '@/generator/generatorSudoku.js'
-import closeIcon from '@/img/close.svg'
-import ToggleSection from './toggleSection/ToggleSection'
+
+import React, { useState, useContext } from 'react'
+import { SettingContext } from '@/context/SettingContext'
+import { getSudokuContent } from '@/generator/generatorSudoku'
+
 import Portal from '@/Portal'
 import Modal from './modal/Modal'
+import closeIcon from '@/img/close.svg'
+import ToggleSection from './toggleSection/ToggleSection'
 
 const levels = [
   { level: 'easy', text: 'Легко' },
   { level: 'medium', text: 'Средне' },
   { level: 'hard', text: 'Сложно' },
-]
+] as const
 
-function SettingMenu({ onClose, setLevelContent, resetGameInfo }) {
+type Digits = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+interface MenuProps {
+  onClose: () => void
+  setLevelContent: (arg0: Digits[][] | null) => void
+  resetGameInfo: () => void
+}
+
+function SettingMenu({ onClose, setLevelContent, resetGameInfo }: MenuProps) {
   const { currentSettings, changeSettings } = useContext(SettingContext)
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const setDifficulty = (level) => changeSettings({ difficulty: level })
+  const setDifficulty = (level: 'easy' | 'medium' | 'hard') =>
+    changeSettings({ difficulty: level })
   const startGame = () => {
     onClose()
     changeSettings({ isStarted: true })

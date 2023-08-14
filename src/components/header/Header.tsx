@@ -1,12 +1,22 @@
 import styles from './header.module.css'
 import classNames from 'classnames'
-import SettingMenu from '../settings/SettingMenu'
 
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { SettingContext } from '@/context/SettingContext'
+
 import Timer from './timer/Timer'
 import Portal from '@/Portal'
+import SettingMenu from '../settings/SettingMenu'
 
-function Header({ setLevelContent, isVictory, resetGameInfo }) {
+type Digits = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+interface HeaderProps {
+  setLevelContent: (arg0: Digits[][] | null) => void
+  resetGameInfo: () => void
+}
+
+function Header({ setLevelContent, resetGameInfo }: HeaderProps) {
+  const { currentSettings } = useContext(SettingContext)
   const [settingsOpen, setSettingsOpen] = useState(false)
 
   return (
@@ -18,7 +28,9 @@ function Header({ setLevelContent, isVictory, resetGameInfo }) {
         Настройки
       </button>
 
-      {isVictory && <p className={classNames(styles.victory)}>Победа!</p>}
+      {currentSettings.isCompleted && (
+        <p className={classNames(styles.victory)}>Победа!</p>
+      )}
 
       <Timer />
 

@@ -1,31 +1,58 @@
 import styles from './game.module.css'
 import classNames from 'classnames'
+
+import { useContext, useState } from 'react'
+import { SettingContext } from '@/context/SettingContext'
+import { GameContext } from '@/context/GameContext'
+import { shuffle } from '@/generator/shuffle'
+
 import Header from '../header/Header'
 import Board from '../board/Board'
 import Controls from '../controls/Controls'
-import { useContext, useState } from 'react'
-import { SettingContext } from '../../SettingContext'
-import { shuffle } from '../../generator/shuffle'
+
+type Digits = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+export interface GameCellInfo {
+  correctDigit: Digits | 0
+  actualDigit: Digits | 0
+  wa: boolean
+  isInitial: boolean
+  notes: Set<Digits>
+}
+
+export type ChangeGameInfo = (
+  blockNumber: number,
+  cellNumber: number,
+  cellInfo: GameCellInfo,
+  previousDigit: number
+) => void
 
 const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-const increaseSetItem = (currentSet, index, diff) => {
-  currentSet.set(index, currentSet.get(index) + diff)
+const increaseMapItem = (
+  currentMap: Map<number, number>,
+  index: number,
+  diff: number
+) => {
+  currentMap.set(index, (currentMap.get(index) as number) + diff)
 }
 
 function Game() {
   const { currentSettings, changeSettings } = useContext(SettingContext)
 
-  const [currentDigit, setCurrentDigit] = useState(null)
+  const [currentDigit, setCurrentDigit] = useState<Digits | 0 | null>(null)
   const [isNotesActive, setIsNotesActive] = useState(false)
-  const [levelContent, setLevelContent] = useState(null)
-  const [gameInfo, setGameInfo] = useState(new Map([['filled', false]]))
-  const [digitCounter, setDigitCounter] = useState(null)
+  const [isBoardFilled, setIsBoardFilled] = useState(false)
+  const [levelContent, setLevelContent] = useState<Digits[][] | null>(null)
+  const [digitCounter, setDigitCounter] = useState<Map<number, number> | null>(
+    null
+  )
+  const [gameInfo, setGameInfo] = useState(new Map<number, GameCellInfo[]>())
 
   const getDefaultGameInfo = () => {
-    const infoTemplate = new Map()
+    const infoTemplate = new Map<number, GameCellInfo[]>()
     for (let blockNumber = 0; blockNumber < 9; blockNumber++) {
-      const currentBlock = new Array(9).fill(null).map(() => ({
+      const currentBlock: GameCellInfo[] = new Array(9).fill(null).map(() => ({
         correctDigit: 0,
         actualDigit: 0,
         wa: false,
@@ -52,23 +79,23 @@ function Game() {
         }
 
         if (changedDigitsCounter.has(cell.actualDigit)) {
-          increaseSetItem(changedDigitsCounter, cell.actualDigit, 1)
+          increaseMapItem(changedDigitsCounter, cell.actualDigit, 1)
         }
       }
     }
 
-    setGameInfo(
-      new Map(
-        currentGameInfo.concat([
-          ['filled', true],
-          ['completed', false],
-        ])
-      )
-    )
+    setGameInfo(new Map(currentGameInfo))
+    setIsBoardFilled(true)
+    changeSettings({ isCompleted: false })
     setDigitCounter(changedDigitsCounter)
   }
 
-  const changeGameInfo = (blockNumber, cellNumber, cellInfo, previousDigit) => {
+  const changeGameInfo: ChangeGameInfo = (
+    blockNumber,
+    cellNumber,
+    cellInfo,
+    previousDigit
+  ) => {
     let entries = [...gameInfo.entries()]
     entries[blockNumber][1][cellNumber] = cellInfo
 
@@ -85,29 +112,30 @@ function Game() {
     const changedDigitsCounter = new Map(digitCounter)
     const actualDigit = cellInfo.actualDigit
     if (actualDigit) {
-      increaseSetItem(changedDigitsCounter, actualDigit, 1)
+      increaseMapItem(changedDigitsCounter, actualDigit, 1)
     }
     if (previousDigit) {
-      increaseSetItem(changedDigitsCounter, previousDigit, -1)
+      increaseMapItem(changedDigitsCounter, previousDigit, -1)
     }
 
     setDigitCounter(changedDigitsCounter)
-    setGameInfo(new Map(entries.concat([['completed', isGameComplete]])))
+    setGameInfo(new Map(entries))
   }
 
-  if (!levelContent && gameInfo.get('filled')) {
-    const defaultInfo = getDefaultGameInfo()
-    defaultInfo.set('filled', false)
-    setGameInfo(defaultInfo)
+  if (!levelContent && isBoardFilled) {
+    setIsBoardFilled(false)
     setDigitCounter(new Map())
+    setGameInfo(getDefaultGameInfo())
   }
 
-  if (levelContent && !gameInfo.get('filled')) {
+  if (levelContent && !isBoardFilled) {
     const defaultInfo = getDefaultGameInfo()
     const defaultDigitCounters = new Map(NUMBERS.map((digit) => [digit, 0]))
 
     for (let blockNumber = 0; blockNumber < 9; blockNumber++) {
       const currentBlock = defaultInfo.get(blockNumber)
+      if (!currentBlock) break
+
       let initialNumberCount = 0
 
       if (currentSettings.difficulty === 'easy')
@@ -126,35 +154,31 @@ function Game() {
           currentBlock[cell].actualDigit = cellDigit
           currentBlock[cell].isInitial = true
 
-          increaseSetItem(defaultDigitCounters, cellDigit, 1)
+          increaseMapItem(defaultDigitCounters, cellDigit, 1)
         }
       }
     }
-    defaultInfo.set('filled', true)
+    setIsBoardFilled(true)
     setGameInfo(defaultInfo)
     setDigitCounter(defaultDigitCounters)
   }
 
   return (
     <div className={classNames(styles.container)}>
-      <Header
-        setLevelContent={setLevelContent}
-        isVictory={gameInfo.get('completed')}
-        resetGameInfo={resetGameInfo}
-      />
-      <Board
-        currentDigit={currentDigit}
-        gameInfo={gameInfo}
-        changeGameInfo={changeGameInfo}
-        isPaused={currentSettings.pause}
-        isNotesActive={isNotesActive}
-      />
-      <Controls
-        setCurrentDigit={setCurrentDigit}
-        isNotesActive={isNotesActive}
-        setIsNotesActive={setIsNotesActive}
-        digitCounter={digitCounter}
-      />
+      <Header setLevelContent={setLevelContent} resetGameInfo={resetGameInfo} />
+      <GameContext.Provider
+        value={{
+          currentDigit,
+          setCurrentDigit,
+          gameInfo,
+          changeGameInfo,
+          isNotesActive,
+          setIsNotesActive,
+        }}
+      >
+        <Board />
+        <Controls digitCounter={digitCounter} />
+      </GameContext.Provider>
     </div>
   )
 }

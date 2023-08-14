@@ -1,10 +1,13 @@
-import { shuffle } from "./shuffle"
+import { shuffle } from './shuffle'
 
-const NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+type Digits = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+type SudokuPart = Array<Set<Digits>>
 
-let digitRows = []
-let digitColumns = []
-let digitBlocks = []
+const NUMBERS: Digits[] = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+let digitRows: SudokuPart = []
+let digitColumns: SudokuPart = []
+let digitBlocks: SudokuPart = []
 
 getSudokuContent()
 
@@ -27,9 +30,9 @@ export function getSudokuContent() {
 }
 
 function setFirstBlockLine() {
-  let firstRowParts = splitRow(shuffle(NUMBERS)).map(shuffle)
-  let secondRowParts = []
-  let thirdRowParts = []
+  let firstRowParts = splitRow(shuffle<Digits>(NUMBERS)).map<Digits[]>(shuffle)
+  let secondRowParts: number[][] = []
+  let thirdRowParts: number[][] = []
 
   if (Math.random() >= 0.5) {
     secondRowParts = [
@@ -45,7 +48,7 @@ function setFirstBlockLine() {
     ]
   }
 
-  const getThirdRow = (firstPart, secondPart) =>
+  const getThirdRow = (firstPart: number[], secondPart: number[]) =>
     NUMBERS.filter(
       (digit) => !firstPart.includes(digit) && !secondPart.includes(digit)
     )
@@ -56,28 +59,29 @@ function setFirstBlockLine() {
     getThirdRow(firstRowParts[2], secondRowParts[2]),
   ]
 
-  let firstRow = firstRowParts.flat()
-  let secondRow = secondRowParts.flat()
-  let thirdRow = thirdRowParts.flat()
+  let firstRow = firstRowParts.flat() as Digits[]
+  let secondRow = secondRowParts.flat() as Digits[]
+  let thirdRow = thirdRowParts.flat() as Digits[]
   const allRowsOfLine = [firstRow, secondRow, thirdRow]
   updateDigitSets(allRowsOfLine, 0)
 }
 
-function setNextBlockLine(lineNumber) {
-  let firstRow = []
-  let secondRow = []
-  let thirdRow = []
+function setNextBlockLine(lineNumber: 1 | 2) {
+  let firstRow: Digits[] = []
+  let secondRow: Digits[] = []
+  let thirdRow: Digits[] = []
 
-  let firstRowParts = []
-  let secondRowParts = []
-  let thirdRowParts = []
+  let firstRowParts: Digits[][] = []
+  let secondRowParts: Digits[][] = []
+  let thirdRowParts: Array<Digits[] | undefined> = []
+
   let numbers = NUMBERS.slice()
 
   const generateFirstRow = () => {
     firstRow = []
     for (let column = 0; column < 9; column++) {
       firstRow.push(
-        shuffle(
+        shuffle<Digits>(
           numbers.filter(
             (digit) =>
               !digitColumns[column].has(digit) && !firstRow.includes(digit)
@@ -96,7 +100,7 @@ function setNextBlockLine(lineNumber) {
     secondRow = []
     for (let column = 0; column < 9; column++) {
       secondRow.push(
-        shuffle(
+        shuffle<Digits>(
           numbers.filter(
             (digit) =>
               !digitColumns[column].has(digit) &&
@@ -113,13 +117,13 @@ function setNextBlockLine(lineNumber) {
   }
   secondRowParts = splitRow(secondRow)
 
-  const getThirdRow = (partNumber) => {
+  const getThirdRow = (partNumber: number) => {
     let freeDigits = NUMBERS.filter(
       (digit) =>
         !firstRowParts[partNumber].includes(digit) &&
         !secondRowParts[partNumber].includes(digit)
     )
-    let combinations = getAllCombinations(shuffle(freeDigits))
+    let combinations = getAllCombinations(shuffle<Digits>(freeDigits))
     while (combinations.length > 0) {
       let combination = combinations.splice(0, 1)[0]
       if (digitColumns[partNumber * 3].has(combination[0])) continue
@@ -129,18 +133,20 @@ function setNextBlockLine(lineNumber) {
     }
   }
 
-  thirdRowParts = [getThirdRow(0), getThirdRow(1), getThirdRow(2)]
-  thirdRow = thirdRowParts.flat()
-  if (thirdRow.length < 9) {
-    setNextBlockLine(lineNumber)
-    return
+  for (let i = 0; i < 3; i++) {
+    const part = getThirdRow(i)
+    if (typeof part === 'undefined') {
+      setNextBlockLine(lineNumber)
+      return
+    }
+    thirdRow.push(...part)
   }
 
   const allRowsOfLine = [firstRow, secondRow, thirdRow]
   updateDigitSets(allRowsOfLine, lineNumber)
 }
 
-function updateDigitSets(allRowsOfLine, lineNumber) {
+function updateDigitSets(allRowsOfLine: Digits[][], lineNumber: 0 | 1 | 2) {
   for (let row = 0; row < 3; row++) {
     addArrayInSet(digitRows[lineNumber * 3 + row], allRowsOfLine[row])
     addArrayInSet(
@@ -153,20 +159,20 @@ function updateDigitSets(allRowsOfLine, lineNumber) {
   }
 }
 
-function addArrayInSet(set, array) {
+function addArrayInSet(set: Set<Digits>, array: Digits[]) {
   for (const digit of array) {
     set.add(digit)
   }
 }
 
-function splitRow(row) {
+function splitRow(row: Digits[]) {
   let parts = []
   let _row = [...row]
   while (_row.length >= 3) parts.push(_row.splice(0, 3))
   return parts
 }
 
-function getAllCombinations(array) {
+function getAllCombinations(array: Digits[]) {
   let combinations = []
   for (const digit of array) {
     combinations.push(
